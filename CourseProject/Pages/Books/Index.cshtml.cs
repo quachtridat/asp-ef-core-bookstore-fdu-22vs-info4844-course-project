@@ -86,8 +86,6 @@ namespace CourseProject.Pages.Books {
         }
 
         public async Task OnGetAsync(int? pageNumber, string? booksViewType) {
-            _logger.LogInformation("GET: {0} = {1}", nameof(ForceClearCache), ForceClearCache);
-
             CurrentPage = Math.Max(1, pageNumber.GetValueOrDefault(1));
             if (Enum.TryParse(booksViewType, true, out BooksViewType parsedBookViewType))
                 CurrentBooksViewType = parsedBookViewType;
