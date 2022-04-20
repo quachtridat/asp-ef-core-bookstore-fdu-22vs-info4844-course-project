@@ -1,0 +1,45 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Homepage";
+}
+
+<div class="text-center lead mb-5">
+    Welcome to our bookstore. We are committed to providing you a gateway to a great selection of books!
+</div>
+
+<div class="row mb-5">
+    <div class="col text-center">
+        <i class="fa-solid fa-book fa-10x"></i>
+        <h4 class="mb-2">Abundance</h4>
+        <p>
+            We have a great library of books, with multiple categories for you to choose from.
+        </p>
+    </div>
+    <div class="col text-center">
+        <i class="fa-solid fa-gear fa-10x"></i>
+        <h4 class="mb-2">Functionality</h4>
+        <p>
+            Our great search and filter functions help you navigate to the books you love efficiently.
+        </p>
+    </div>
+    <div class="col text-center">
+        <i class="fa-solid fa-circle-info fa-10x"></i>
+        <h4 class="mb-2">Detailedness</h4>
+        <p>
+            Books are provided with detailed information to provide you full and accurate insights into your books.
+        </p>
+    </div>
+</div>
+
+<div class="row text-center mb-5">
+    <div clas="col">
+        <img src="https://caapa.memberclicks.net/assets/images/bookstore3.jpg" />
+    </div>
+</div>
+
+<div class="row text-center">
+    <a asp-page="/Books/Index">
+        <input type="button" value="Check it out!" class="btn btn-primary" />
+    </a>
+</div>

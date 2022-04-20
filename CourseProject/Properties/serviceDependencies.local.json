@@ -1,0 +1,17 @@
+{
+  "dependencies": {
+    "secrets1": {
+      "type": "secrets.user"
+    },
+    "mssql1": {
+      "secretStore": "LocalSecretsFile",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/quachtridat-fdu/databases/project-fdu-vs22-info4844",
+      "type": "mssql.azure",
+      "connectionId": "ConnectionStrings:quachtridat-fdu"
+    },
+    "mssql2": {
+      "type": "mssql.local",
+      "connectionId": "ConnectionStrings:CourseProjectContext"
+    }
+  }
+}

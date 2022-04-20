@@ -1,0 +1,284 @@
+﻿@page
+@model CourseProject.Pages.Books.IndexModel
+
+@{
+    ViewData["Title"] = "Books";
+}
+
+<div class="text-center mb-3">
+    <h1>Books</h1>
+    <a asp-page="Create">
+        <input class="btn-primary btn" type="button" value="Create New" />
+    </a>
+</div>
+
+<div class="accordion mb-3" id="accordion-filter-book">
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="accordion-heading-filter-book">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-collapse-filter-book" aria-expanded="false" aria-controls="accordion-collapse-filter-book">
+                Filter Books
+            </button>
+        </h2>
+        <div id="accordion-collapse-filter-book" class="accordion-collapse collapse" aria-labelledby="accordion-heading-filter-book" data-bs-parent="#accordion-filter-book">
+            <div class="accordion-body">
+                <form class="mb-3" method="post">
+                    <div class="row mb-3">
+                        <div class="col d-flex flex-column">
+                            <div class="row d-flex flex-column mb-3">
+                                <label class="form-label" for="filter-book-title">Book Title</label>
+                                <input class="form-control" type="text" id="filter-book-title" asp-for="FilteredTitle" placeholder="Title" />
+                            </div>
+                            <div class="row d-flex flex-column mb-3">
+                                <label class="form-label" for="filter-book-author">Book Author</label>
+                                <input class="form-control" type="text" id="filter-book-author" asp-for="FilteredAuthor" placeholder="Author(s)" aria-describedby="filter-book-author-help" />
+                            </div>
+                            <div class="row d-flex flex-column flex-grow-1 mb-3">
+                                <label class="form-label" for="filter-book-description">Book Description</label>
+                                <textarea class="form-control flex-grow-1" type="text" id="filter-book-description" asp-for="FilteredDescription" placeholder="Description"></textarea>
+                            </div>
+                        </div>
+                        <div class="col d-flex flex-column">
+                            <label class="form-label" for="filter-book-categories">Book Categories</label>
+                            <select class="form-select flex-grow-1" id="filter-book-categories" aria-label="Filter Book Categories" asp-for="FilteredCategories" asp-items="Model.FilterCategories">
+                                @if (Model.FilteredCategories is null || Model.FilteredCategories.FirstOrDefault(string.Empty) == string.Empty) {
+                                    <option selected>@Model.FilterWildcardText</option>
+                                } else {
+                                    <option>@Model.FilterWildcardText</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col d-flex flex-column">
+                            <label class="form-label" for="filter-book-countries">Book Countries</label>
+                            <select class="form-select flex-grow-1" id="filter-book-countries" aria-label="Filter Book Countries" asp-for="FilteredCountries" asp-items="Model.FilterCountries">
+                                @if (Model.FilteredCountries is null || Model.FilteredCountries.FirstOrDefault(string.Empty) == string.Empty) {
+                                    <option selected>@Model.FilterWildcardText</option>
+                                } else {
+                                    <option>@Model.FilterWildcardText</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col d-flex flex-column">
+                            <label class="form-label" for="filter-book-languages">Book Languages</label>
+                            <select class="form-select flex-grow-1" id="filter-book-languages" aria-label="Filter Book Languages" asp-for="FilteredLanguages" asp-items="Model.FilterLanguages">
+                                @if (Model.FilteredLanguages is null || Model.FilteredLanguages.FirstOrDefault(string.Empty) == string.Empty) {
+                                    <option selected>@Model.FilterWildcardText</option>
+                                } else {
+                                    <option>@Model.FilterWildcardText</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row row-cols-1">
+                        <button type="submit" class="col text-center btn btn-primary">Filter</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="mb-3 text-end">
+    <nav aria-label="Books view types navigation">
+        <span>Switch to</span>
+        <ul class="pagination d-inline-flex">
+            @foreach (var booksViewTypeValue in Enum.GetValues<IndexModel.BooksViewType>()) {
+                if (booksViewTypeValue == 0) continue;
+
+                var booksViewTypeName = Enum.GetName<IndexModel.BooksViewType>(booksViewTypeValue);
+                if (booksViewTypeName is not null && !string.IsNullOrEmpty(booksViewTypeName)) {
+                    if (Model.CurrentBooksViewType == booksViewTypeValue) {
+                        <li class="page-item disabled">
+                            <a class="page-link" tabindex=-1 asp-route-BooksViewType="@booksViewTypeName">
+                                @booksViewTypeName
+                            </a>
+                        </li>
+                    } else {
+                        <li class="page-item">
+                            <a class="page-link text-capitalize" asp-route-BooksViewType="@booksViewTypeName">
+                                @booksViewTypeName
+                            </a>
+                        </li>
+                    }
+                }
+            }
+        </ul>
+        <span>view</span>
+    </nav>
+</div>
+
+@if (Model.CurrentBooksViewType == IndexModel.BooksViewType.List) {
+    <table class="table table-striped mb-3">
+        <thead>
+            <tr>
+                <th>
+                    Image
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Books.FirstOrDefault(new Models.Book()).Title)
+                </th>
+                <th class="w-50">
+                    @Html.DisplayNameFor(model => model.Books.FirstOrDefault(new Models.Book()).Descriptions)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Books.FirstOrDefault(new Models.Book()).Categories)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Books.FirstOrDefault(new Models.Book()).Authors)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Books.FirstOrDefault(new Models.Book()).Countries)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Books.FirstOrDefault(new Models.Book()).Languages)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Books.FirstOrDefault(new Models.Book()).Pages)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Books.FirstOrDefault(new Models.Book()).Year)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Books.FirstOrDefault(new Models.Book()).Price)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Books) {
+                <tr>
+                    <td>
+                        <img src="~/images/@item.ImageFileName" width=100 />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </td>
+                    <td class="w-50">
+                        @item.Descriptions.FirstOrDefault().TakeWords(50, endingEllipsis: true) <a asp-page="./Details" asp-route-id="@item.BookId"> (read more)</a>
+                    </td>
+                    <td>
+                        @string.Join(", ", item.Categories)
+                    </td>
+                    <td>
+                        @string.Join("; ", item.Authors)
+                    </td>
+                    <td>
+                        @string.Join(", ", item.Countries)
+                    </td>
+                    <td>
+                        @string.Join(", ", item.Languages)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Pages)
+                    </td>
+                    <td>
+                        @if (item.Year < 0) {
+                            <text>
+                                @(-item.Year) B.C.
+                            </text>
+                        } else {
+                            @Html.DisplayFor(modelItem => item.Year)
+                        }
+                    </td>
+                    <td>
+                        @item.Price.ToString("C", System.Globalization.CultureInfo.CreateSpecificCulture("en-CA"))
+                    </td>
+                    <td>
+                        <p>
+                            <a asp-page="./Edit" asp-route-id="@item.BookId">Edit</a>
+                        </p>
+                        <p>
+                            <a asp-page="./Details" asp-route-id="@item.BookId">Details</a>
+                        </p>
+                        <p>
+                            <a asp-page="./Delete" asp-route-id="@item.BookId">Delete</a>
+                        </p>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+} else if (Model.CurrentBooksViewType == IndexModel.BooksViewType.Tiles) {
+    <div class="row row-cols-5 g-2 mb-3">
+        @foreach (var book in Model.Books) {
+            <div class="col">
+                <div class="card">
+                    <img src="~/images/@book.ImageFileName" class="card-img-top img-fluid" alt="@book.Title">
+                    <div class="card-body">
+                        <h5 class="card-title">@book.Title</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">@string.Join("; ", book.Authors)</h6>
+                        <p class="card-text">
+                            @book.Descriptions.FirstOrDefault().TakeWords(25, endingEllipsis: true)
+                            <a asp-page="./Details" asp-route-id="@book.BookId"> (read more)</a>
+                        </p>
+                        <hr />
+                        <div class="card-text text-muted">
+                            <a asp-page="/Books/Edit" asp-route-id="@book.BookId">Edit</a> |
+                            <a asp-page="/Books/Details" asp-route-id="@book.BookId">Details</a> |
+                            <a asp-page="/Books/Delete" asp-route-id="@book.BookId">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+<nav aria-label="Pagination">
+    <ul class="pagination justify-content-center">
+        @if (Model.CurrentPage == 1) {
+            <li class="page-item disabled">
+                <a class="page-link" tabindex=-1 asp-route-PageNumber="1">First</a>
+            </li>
+            <li class="page-item disabled">
+                <a class="page-link" tabindex=-1 asp-route-PageNumber="1">Previous</a>
+            </li>
+        } else {
+            <li class="page-item">
+                <a class="page-link" asp-route-PageNumber="1">First</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" asp-route-PageNumber="@(Math.Max(1, Model.CurrentPage-1))">Previous</a>
+            </li>
+        }
+        @{
+            int start = Math.Max(1, Model.CurrentPage - Model.MaxPagination / 2);
+            int end = Math.Min(Model.NumPages, start + Model.MaxPagination - 1);
+
+            if (end - start + 1 < Model.MaxPagination)
+                start = Math.Max(1, end - Model.MaxPagination + 1);
+
+            for (int i = start; i <= end; i += 1) {
+                if (Model.CurrentPage == i) {
+                    <li class="page-item active">
+                        <a class="page-link" asp-page="./Index" asp-route-PageNumber="@i">
+                            @i
+                            <span class="sr-only"> (current)</span>
+                        </a>
+                    </li>
+                } else {
+                    <li class="page-item">
+                        <a class="page-link" asp-page="./Index" asp-route-PageNumber="@i">
+                            @i
+                        </a>
+                    </li>
+                }
+            }
+        }
+        @if (Model.CurrentPage == Model.NumPages) {
+            <li class="page-item disabled">
+                <a class="page-link" tabindex=-1 asp-route-PageNumber="@Model.NumPages">Next</a>
+            </li>
+            <li class="page-item disabled">
+                <a class="page-link" tabindex=-1 asp-route-PageNumber="@Model.NumPages">Last</a>
+            </li>
+        } else {
+            <li class="page-item">
+                <a class="page-link" asp-page="./Index" asp-route-PageNumber="@(Math.Min(Model.NumPages, Model.CurrentPage+1))">Next</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" asp-route-PageNumber="@Model.NumPages">Last</a>
+            </li>
+        }
+    </ul>
+</nav>

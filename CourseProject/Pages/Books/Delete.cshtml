@@ -1,0 +1,116 @@
+﻿@page
+@model CourseProject.Pages.Books.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete Book</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Image
+        </dt>
+        <dd class="col-sm-10">
+            <img src="~/images/@Model.Book.ImageFileName" />
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Book.Title)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Book.Title)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Book.Descriptions)
+        </dt>
+        <dd class="col-sm-10">
+            <div class="row">
+                <div class="col-2 nav flex-column nav-pills me-3" id="book-description-vertical-pill-tabs" role="tablist" aria-orientation="vertical">
+                    @foreach (var indexedDescription in Model.Book.Descriptions.Select((description, descriptionIndex) => new { Value = description, Index = descriptionIndex })) {
+                        @if (indexedDescription.Index == 0) {
+                            <button class="nav-link active" id=@($"book-description-vertical-pill-tab-{indexedDescription.Index}") data-bs-toggle="pill" data-bs-target=@($"#book-description-vertical-pill-pane-{indexedDescription.Index}") type="button" role="tab" aria-controls=@($"book-description-vertical-pill-pane-{indexedDescription.Index}") aria-selected="true">
+                                Description #@(indexedDescription.Index+1)
+                            </button>
+                        } else {
+                            <button class="nav-link" id=@($"book-description-vertical-pill-tab-{indexedDescription.Index}") data-bs-toggle="pill" data-bs-target=@($"#book-description-vertical-pill-pane-{indexedDescription.Index}") type="button" role="tab" aria-controls=@($"book-description-vertical-pill-pane-{indexedDescription.Index}") aria-selected="false">
+                                Description #@(indexedDescription.Index+1)
+                            </button>
+                        }
+                    }
+                </div>
+                <div class="col-8 tab-content flex-grow-1" id="book-description-vertical-pill-panes">
+                    @foreach (var indexedDescription in Model.Book.Descriptions.Select((description, descriptionIndex) => new { Value = description, Index = descriptionIndex })) {
+                        @if (indexedDescription.Index == 0) {
+                            <div class="tab-pane fade show active" id=@($"book-description-vertical-pill-pane-{indexedDescription.Index}") role="tabpanel" aria-labelledby=@($"book-description-vertical-pill-tab-{indexedDescription.Index}")>
+                                @indexedDescription.Value
+                            </div>
+                        } else {
+                            <div class="tab-pane fade" id=@($"book-description-vertical-pill-pane-{indexedDescription.Index}") role="tabpanel" aria-labelledby=@($"book-description-vertical-pill-tab-{indexedDescription.Index}")>
+                                @indexedDescription.Value
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Book.Categories)
+        </dt>
+        <dd class="col-sm-10">
+            @string.Join(", ", Model.Book.Categories)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Book.Authors)
+        </dt>
+        <dd class="col-sm-10">
+            @string.Join("; ", Model.Book.Authors)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Book.Countries)
+        </dt>
+        <dd class="col-sm-10">
+            @string.Join(", ", Model.Book.Countries)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Book.Languages)
+        </dt>
+        <dd class="col-sm-10">
+            @string.Join(", ", Model.Book.Languages)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Book.Pages)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Book.Pages)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Book.Year)
+        </dt>
+        <dd class="col-sm-10">
+            @if (Model.Book.Year < 0) {
+                <text>
+                    @(-Model.Book.Year) B.C.
+                </text>
+            } else {
+                @Html.DisplayFor(model=> model.Book.Year)
+            }
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Book.Price)
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Book.Price.ToString("C", System.Globalization.CultureInfo.CreateSpecificCulture("en-CA"))
+        </dd>
+    </dl>
+    
+    <form method="post">
+        <input type="hidden" asp-for="Book.BookId" />
+        <input type="submit" value="Delete" class="btn btn-danger" />
+        <a asp-page="./Index">
+            <input type="button" value="Back to List" class="btn-secondary btn" />
+        </a>
+    </form>
+</div>
